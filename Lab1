@@ -1,1 +1,44 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+def drawSquares(ax,n,p):
+    if n>0:
+        print(n)
+        print(p)
+        a1=[0,1,2,3,0]
+        
+        ax.plot(p[:,0],p[:,1], linewidth=1, color='k')
+        p=p/2
+        
+        q1=p[a1]+75
+        print(q1)
+        ax.plot(q1[:,0],q1[:,1], linewidth=1, color='k')
 
+        q2=p[a1]+[-25,75]
+        print(q2)
+        ax.plot(q2[:,0],q2[:,1], linewidth=1, color='k')
+        
+        q3=p[a1]+[75,-25]
+        print(q3)
+        ax.plot(q3[:,0],q3[:,1], linewidth=1, color='k')
+        
+        q4=p[a1]-25
+        print(q4)
+        ax.plot(q4[:,0],q4[:,1], linewidth=1, color='k')
+        
+        drawSquares(ax,n-1,q1)
+        drawSquares(ax,n-1,q2)
+        drawSquares(ax,n-1,q3)
+        drawSquares(ax,n-1,q4)
+       
+plt.close("all")
+origSize=100
+p=np.array([[0,0],[0,origSize],[origSize,origSize],[origSize,0],[0,0]])
+fig, ax= plt.subplots()
+#ax.plot(p[:,0],p[:,1], linewidth=1, color='k')
+n = int(input('Please enter the number of iterations: '))
+drawSquares(ax,n1,p)
+ax.set_aspect(1.0)
+#ax.axis('off')
+plt.show()
+fig.savefig('squares.png')
