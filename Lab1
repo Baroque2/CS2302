@@ -1,44 +1,160 @@
+#Course: CS 2302: Data Structures
+#Author: Bruno Roque
+#Assignment: Lab #1
+#Instructor: Olac Fuentes
+#Teacher Asistant: Anindita Nath 
+#Last Modification: Feb 14, 2019
+#Purspose:Drawing Figures Using Recursion
 import numpy as np
 import matplotlib.pyplot as plt
 import math
 def drawSquares(ax,n,p):
-    if n>0:
-        print(n)
-        print(p)
+    #This method creates squares with smaller squares in each vertex
+    if n>0:#ends the recurcion call once it reaches the conditional
+        #print(n)
+        #print(p)
         a1=[0,1,2,3,0]
         
-        ax.plot(p[:,0],p[:,1], linewidth=1, color='k')
-        p=p/2
-        
-        q1=p[a1]+75
-        print(q1)
-        ax.plot(q1[:,0],q1[:,1], linewidth=1, color='k')
+        ax.plot(p[:,0],p[:,1], linewidth=1, color='k')#Prints the original square
+        p=p/2#Divide the original square's parameters by half to us on the 
+             #vertex of the original square
+        RU=p[a1]+75#Moves the reduced square to the upper right vertex
+        #print(q1)
+        ax.plot(RU[:,0],RU[:,1], linewidth=1, color='k')
 
-        q2=p[a1]+[-25,75]
-        print(q2)
-        ax.plot(q2[:,0],q2[:,1], linewidth=1, color='k')
+        LU=p[a1]+[-25,75]#Moves the reduced square to the upper left vertex
+        #print(q2)
+        ax.plot(LU[:,0],LU[:,1], linewidth=1, color='k')
         
-        q3=p[a1]+[75,-25]
-        print(q3)
-        ax.plot(q3[:,0],q3[:,1], linewidth=1, color='k')
+        RB=p[a1]+[75,-25]#Moves the reduced square to the bottom right vertex
+        #print(q3)
+        ax.plot(RB[:,0],RB[:,1], linewidth=1, color='k')
         
-        q4=p[a1]-25
-        print(q4)
-        ax.plot(q4[:,0],q4[:,1], linewidth=1, color='k')
+        LB=p[a1]-25#Moves the reduced square to the bottom left vertex
+        #print(q4)
+        ax.plot(LB[:,0],LB[:,1], linewidth=1, color='k')
         
-        drawSquares(ax,n-1,q1)
-        drawSquares(ax,n-1,q2)
-        drawSquares(ax,n-1,q3)
-        drawSquares(ax,n-1,q4)
-       
+        drawSquares(ax,n-1,RU)#Continues the recurcion call by making the upper right square the original square
+        drawSquares(ax,n-1,LU)#Continues the recurcion call by making the upper left square the original square
+        drawSquares(ax,n-1,RB)#Continues the recurcion call by making the bottom right square the original square
+        drawSquares(ax,n-1,LB)#Continues the recurcion call by making the bottom left square the original square
 plt.close("all")
 origSize=100
 p=np.array([[0,0],[0,origSize],[origSize,origSize],[origSize,0],[0,0]])
 fig, ax= plt.subplots()
-#ax.plot(p[:,0],p[:,1], linewidth=1, color='k')
-n = int(input('Please enter the number of iterations: '))
-drawSquares(ax,n1,p)
+try:
+    n = int(input('Please enter the number of iterations for figure 1: '))
+except ValueError:
+    print('Error')
+    n= int(input('Please enter a valid number: '))   
+drawSquares(ax,n,p)#Original recursive call
+ax.set_aspect(1.0)
+plt.show()
+fig.savefig('squares.png')
+
+def circle(center,rad):
+    n = int(4*rad*math.pi)
+    t = np.linspace(0,6.3,n)
+    x = center[0]+rad*np.sin(t)
+    y = center[1]+rad*np.cos(t)
+    return x,y
+def draw_circles(ax,n,i,center,radius,w):
+    if n>0:
+        if i<10:
+            #print(1)
+            w=.5
+            x,y = circle(center,radius)#Method call used to get the x and y cordinates
+            ax.plot(x+radius,y,color='k')
+            draw_circles(ax,n-1,i,center,radius*w,.5)
+        if i>=10 and i<40:
+            #print(2)
+            w=.7
+            x,y = circle(center,radius)
+            ax.plot(x+radius,y,color='k')
+            draw_circles(ax,n-1,i,center,radius*w,.7)  
+        if i>=40:
+           #print(3)
+            w=.90
+            x,y = circle(center,radius)
+            ax.plot(x+radius,y,color='k')
+            draw_circles(ax,n-1,i,center,radius*w,.90)
+plt.close("all") 
+fig, ax = plt.subplots() 
+try:
+    n = int(input('Please enter the number of iterations for figure 2: '))
+except ValueError:
+    print('Error')
+    n= int(input('Please enter a valid number: '))
+draw_circles(ax,n,n, [100,0], 100,0)
+ax.set_aspect(1.0)
+ax.axis('off')
+plt.show()
+fig.savefig('circles.png')
+
+def recursiveRoots(ax,i,x,y,n):
+    if n>0:
+        div=i/2
+        x1=x+div
+        yi=y-1
+        x2=x-div
+    
+        root=np.array([[x1,yi],[x,y],[x2,yi]])
+        ax.plot(root[:,0],root[:,1], linewidth=1, color='k')       
+     
+        recursiveRoots(ax,div,x1,yi,n-1)
+        recursiveRoots(ax,div,x2,yi,n-1)
+plt.close("all")
+fig, ax= plt.subplots()
+try:
+    n = int(input('Please enter the number of iterations for figure 3: '))
+except ValueError:
+    print('Error')
+    n= int(input('Please enter a valid number: '))
+recursiveRoots(ax,5,0,0,n)
 ax.set_aspect(1.0)
 #ax.axis('off')
 plt.show()
 fig.savefig('squares.png')
+def draw_circles(ax,n,center,radius,w,prevM):
+    if n>0:
+        m=radius*2/3
+        LC=[radius*1/3,0]
+        RC=[100+(m+prevM),0]
+        UC=[100,m+prevM]
+        DC=[100,-m-prevM]
+
+        x,y = circle(center,radius)
+        ax.plot(x,y,color='k')
+        
+        x,y = circle(center,radius/w)
+        ax.plot(x,y,color='k')        
+        draw_circles(ax,n-1,center,radius/w,w,m+prevM)  
+        
+        x,y = circle(center,radius/w)
+        ax.plot(x+m,y,color='k')        
+        draw_circles(ax,n-1,LC,radius/w,w,m+prevM)
+        
+        x,y = circle(center,radius/w)
+        ax.plot(x-m,y,color='k')
+        draw_circles(ax,n-1,RC,radius/w,w,m+prevM)
+        
+        x,y = circle(center,radius/w)
+        ax.plot(x,y+m,color='k')
+        draw_circles(ax,n-1,UC,radius/w,w,m+prevM)
+        
+        x,y = circle(center,radius/w)
+        ax.plot(x,y-m,color='k')
+        draw_circles(ax,n-1,DC,radius/w,w,m+prevM)    
+plt.close("all") 
+fig, ax = plt.subplots() 
+try:
+    n=int(input('Please enter the number of iterations for figure 4: '))
+except ValueError:
+    print('Error')
+    n= int(input('Please enter a valid number: '))
+draw_circles(ax,n, [100,0], 100,3,0)
+ax.set_aspect(1.0)
+ax.axis('off')
+plt.show()
+fig.savefig('circles.png')
+
