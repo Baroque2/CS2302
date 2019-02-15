@@ -46,12 +46,12 @@ try:
     n = int(input('Please enter the number of iterations for figure 1: '))
 except ValueError:
     print('Error')
-    n= int(input('Please enter a valid number: '))   
+    n= int(input('Please enter a valid number: '))
+print('n: ',n)
 drawSquares(ax,n,p)#Original recursive call
 ax.set_aspect(1.0)
 plt.show()
 fig.savefig('squares.png')
-
 def circle(center,rad):
     n = int(4*rad*math.pi)
     t = np.linspace(0,6.3,n)
@@ -59,25 +59,23 @@ def circle(center,rad):
     y = center[1]+rad*np.cos(t)
     return x,y
 def draw_circles(ax,n,i,center,radius,w):
+    #This method creates smaller circles and shifts the center of each smaller circle
     if n>0:
-        if i<10:
-            #print(1)
+        if i<10:#Depending on the user input the recursive method will change
             w=.5
             x,y = circle(center,radius)#Method call used to get the x and y cordinates
-            ax.plot(x+radius,y,color='k')
-            draw_circles(ax,n-1,i,center,radius*w,.5)
+            ax.plot(x+radius,y,color='k')#Plots the circle
+            draw_circles(ax,n-1,i,center,radius*w,.5)#Recursive method that changes te radius
         if i>=10 and i<40:
-            #print(2)
-            w=.7
+            w=.82
             x,y = circle(center,radius)
             ax.plot(x+radius,y,color='k')
-            draw_circles(ax,n-1,i,center,radius*w,.7)  
+            draw_circles(ax,n-1,i,center,radius*w,.82)  
         if i>=40:
-           #print(3)
-            w=.90
+            w=.95
             x,y = circle(center,radius)
             ax.plot(x+radius,y,color='k')
-            draw_circles(ax,n-1,i,center,radius*w,.90)
+            draw_circles(ax,n-1,i,center,radius*w,.95)
 plt.close("all") 
 fig, ax = plt.subplots() 
 try:
@@ -85,23 +83,26 @@ try:
 except ValueError:
     print('Error')
     n= int(input('Please enter a valid number: '))
-draw_circles(ax,n,n, [100,0], 100,0)
+print('n: ',n)
+draw_circles(ax,n,n, [100,0], 100,0)#Original recursive method
 ax.set_aspect(1.0)
 ax.axis('off')
 plt.show()
 fig.savefig('circles.png')
-
 def recursiveRoots(ax,i,x,y,n):
+    #This method creates a root like diagram
     if n>0:
+        #These are the equations to create new cordinates to be 
+        #plotted and passed to the recursive methods
         div=i/2
         x1=x+div
         yi=y-1
         x2=x-div
     
-        root=np.array([[x1,yi],[x,y],[x2,yi]])
-        ax.plot(root[:,0],root[:,1], linewidth=1, color='k')       
+        root=np.array([[x1,yi],[x,y],[x2,yi]])#Creates an array to be used for plotting
+        ax.plot(root[:,0],root[:,1], linewidth=1, color='k')#Plots the array    
      
-        recursiveRoots(ax,div,x1,yi,n-1)
+        recursiveRoots(ax,div,x1,yi,n-1)#Recursive method that passes the new coordinates
         recursiveRoots(ax,div,x2,yi,n-1)
 plt.close("all")
 fig, ax= plt.subplots()
@@ -110,13 +111,15 @@ try:
 except ValueError:
     print('Error')
     n= int(input('Please enter a valid number: '))
-recursiveRoots(ax,5,0,0,n)
+print('n: ',n)
+recursiveRoots(ax,5,0,0,n)#Original recursive method
 ax.set_aspect(1.0)
-#ax.axis('off')
 plt.show()
 fig.savefig('squares.png')
-def draw_circles(ax,n,center,radius,w,prevM):
+def draw_inside_circles(ax,n,center,radius,w,prevM):
+    #This method makes smaller circles within an original circle in a cross formation
     if n>0:
+        #These functions create the new coordinates to be used in the recursive methods
         m=radius*2/3
         LC=[radius*1/3,0]
         RC=[100+(m+prevM),0]
@@ -128,23 +131,24 @@ def draw_circles(ax,n,center,radius,w,prevM):
         
         x,y = circle(center,radius/w)
         ax.plot(x,y,color='k')        
-        draw_circles(ax,n-1,center,radius/w,w,m+prevM)  
+        draw_inside_circles(ax,n-1,center,radius/w,w,m+prevM)  
         
         x,y = circle(center,radius/w)
         ax.plot(x+m,y,color='k')        
-        draw_circles(ax,n-1,LC,radius/w,w,m+prevM)
+        draw_inside_circles(ax,n-1,LC,radius/w,w,m+prevM)
         
         x,y = circle(center,radius/w)
         ax.plot(x-m,y,color='k')
-        draw_circles(ax,n-1,RC,radius/w,w,m+prevM)
+        draw_inside_circles(ax,n-1,RC,radius/w,w,m+prevM)
         
         x,y = circle(center,radius/w)
         ax.plot(x,y+m,color='k')
-        draw_circles(ax,n-1,UC,radius/w,w,m+prevM)
+        draw_inside_circles(ax,n-1,UC,radius/w,w,m+prevM)
         
         x,y = circle(center,radius/w)
         ax.plot(x,y-m,color='k')
-        draw_circles(ax,n-1,DC,radius/w,w,m+prevM)    
+
+        draw_inside_circles(ax,n-1,DC,radius/w,w,m+prevM)    
 plt.close("all") 
 fig, ax = plt.subplots() 
 try:
@@ -152,9 +156,13 @@ try:
 except ValueError:
     print('Error')
     n= int(input('Please enter a valid number: '))
-draw_circles(ax,n, [100,0], 100,3,0)
+print('n: ',n)
+draw_inside_circles(ax,n, [100,0], 100,3,0)#Original method, [100,0] is the center coordinate
+#100 is the radius, 3 is 'w' which will be the number that will be used to decrease the circles
+#0 is precM wich is used with m for the coordinate equations
 ax.set_aspect(1.0)
 ax.axis('off')
 plt.show()
 fig.savefig('circles.png')
+
 
