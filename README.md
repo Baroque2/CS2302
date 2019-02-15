@@ -1,2 +1,2 @@
 # CS2302
-Code work for Spring o 2019
+Code work for Spring of 2019
